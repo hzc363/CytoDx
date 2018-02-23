@@ -15,7 +15,7 @@ install_github("hzc363/CytoDx")
 Here we provide a simple simulated example. Please see the vignette for an example that applies tssm to diagnos accute myeloid lymphoma using flow cytometry data. 
 
 ```
-library(tssm)
+library(CytoDx)
 
 # simulate 10 samples of class A 
 A = data.frame("marker1"=c(rnorm(1000),rnorm(1000,mean=10)),
