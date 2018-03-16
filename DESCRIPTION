@@ -1,7 +1,7 @@
 Package: CytoDx
 Type: Package
 Title: Robust prediction of clinical outcomes using cytometry data without cell gating
-Version: 0.1.0
+Version: 0.99.0
 Author: Zicheng Hu
 Maintainer: Zicheng Hu <zicheng.hu@ucsf.edu>
 Description: This package provides functions that predict clinical outcomes using single cell data without gating. 
