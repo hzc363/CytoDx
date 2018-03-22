@@ -1,30 +1,7 @@
----
-title: "Introduction to CytoDx"
-author: "Zicheng Hu"
-date: "`r Sys.Date()`"
-output: rmarkdown::pdf_document
-vignette: >
-  %\VignetteIndexEntry{Introduction to CytoDx}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
-CytoDx is a method that predicts clinical outcomes using single cell data without the need of cell gating. It first predicts the association between each cell and the outcome using a linear statistical model (Figure 1). The cell level predictions are then averaged within each sample to represent the sample level predictor. A second model is used to make prediction at the sample level (Figure 1). 
-
-```{r, out.width = "500px",echo=FALSE}
+## ---- out.width = "500px",echo=FALSE-------------------------------------
 knitr::include_graphics("tssm_intro.jpg")
-```
 
-
-
-## Example: diagnosing AML using flow cytometry
-
-In this example, we build a CytoDx model to diagnose acute myeloid leukemia (AML) using flow cytometry data. We train the model using data from 5 AML patients and 5 controls and test the performance in a test dataset. 
-
-### Step 1: Prepare data
-The CytoDx R package contains the fcs files and the ground truth (AML or normal) that are needed for our example. We first load the ground truth.
-\newpage
-```{r, results='asis',message=FALSE}
+## ---- results='asis',message=FALSE---------------------------------------
 library(CytoDx)
 
 # Find data in CytoDx package
@@ -35,10 +12,8 @@ fcs_info = read.csv(file.path(path,"fcs_info.csv"))
 
 # print out the ground truth
 knitr::kable(fcs_info)
-```
 
-We then read the cytometry data for training samples using the fcs2DF function.
-```{r, results='asis',message=FALSE}
+## ---- results='asis',message=FALSE---------------------------------------
 # Find the training data
 train_info = subset(fcs_info,fcs_info$dataset=="train")
 
@@ -52,31 +27,23 @@ train_data = fcs2DF(fcsFiles=fn,
                     b=1/150,
                     excludeTransformParameters=
                       c("FSC-A","FSC-W","FSC-H","Time"))
-```
 
-The CytoDx is flexibily to data transformations. It can be applied to rank transformed data to reduce batch effects. Here, we transform the original data to rank data.
-```{r, results='asis',message=FALSE}
+## ---- results='asis',message=FALSE---------------------------------------
 # Perfroms rank transformation
 x_train = pRank(x=train_data[,1:7],xSample=train_data$xSample)
 
 # Convert data frame into matrix. Here we included the 2-way interactions.
 x_train = model.matrix(~.*.,x_train)
-```
 
-### Step 2: Build CytoDx model
-We use training data to build a predictive model. 
-```{r, results='asis',message=FALSE,warning=FALSE}
+## ---- results='asis',message=FALSE,warning=FALSE-------------------------
 # Build predictive model using the CytoDx.fit function
 fit = CytoDx.fit(x=x_train,
                y=(train_data$y=="aml"),
                xSample=train_data$xSample,
                family = "binomial",
                reg = FALSE)
-```
 
-### Step 3: Predict AML using testing data
-We first load and rank transform the test data.
-```{r, results='asis',message=FALSE}
+## ---- results='asis',message=FALSE---------------------------------------
 # Find testing data
 test_info = subset(fcs_info,fcs_info$dataset=="test")
 
@@ -95,16 +62,12 @@ x_test = pRank(x=test_data[,1:7],xSample=test_data$xSample)
 
 # Convert data frame into matrix. Here we included the 2-way interactions.
 x_test = model.matrix(~.*.,x_test)
-```
 
-We use the built CytoDx model to predict AML.
-```{r, results='asis',message=FALSE}
+## ---- results='asis',message=FALSE---------------------------------------
 # Predict AML using CytoDx.ped function
 pred = CytoDx.pred(fit,xNew=x_test,xSampleNew=test_data$xSample)
-```
 
-We plot the prediction. In this example, CytoDx classifies the sample into AML and normal perfectly. 
-```{r, results='asis',message=FALSE,fig.width = 5}
+## ---- results='asis',message=FALSE,fig.width = 5-------------------------
 # Cmbine prediction and truth
 result = data.frame("Truth"=test_info$Label,
                     "Prob"=pred$xNew.Pred.sample$y.Pred.s0)
@@ -113,13 +76,9 @@ result = data.frame("Truth"=test_info$Label,
 stripchart(result$Prob~result$Truth, jitter = 0.1,
            vertical = TRUE, method = "jitter", pch = 20,
            xlab="Truth",ylab="Predicted Prob of AML")
-```
 
-### Step 4: Find cell subsets associated with AML
-We use a decision tree to find cell subsets that are associated the AML. In this step, the original cytometry data should be used, rather than the ranked data. 
-```{r, results='asis',message=FALSE,fig.width = 5}
+## ---- results='asis',message=FALSE,fig.width = 5-------------------------
 # Use decision tree to find the cell subsets that are associated the AML.
 TG = treeGate(P = fit$train.Data.cell$y.Pred.s0,
               x= train_data[,1:7])
-```
 

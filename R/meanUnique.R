@@ -13,6 +13,6 @@
 
 meanUnique = function(x){
   if(is.numeric(x)){
-    return(mean(x,na.rm = T))
+    return(mean(x,na.rm = TRUE))
   }else(return(unique(x)))
 }

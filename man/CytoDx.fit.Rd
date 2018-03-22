@@ -60,7 +60,6 @@ Returns a list. train.Data.cell contains the trainig data and the
 A function that builds the CytoDx model.
 }
 \examples{
-library(CytoDx)
 # Find the table containing fcs file names in CytoDx package
 path=system.file("extdata",package="CytoDx")
 # read the table

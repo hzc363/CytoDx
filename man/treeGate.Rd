@@ -24,7 +24,6 @@ A function that sse decision tree to find a group of cells that are
 associated with clinical outcome.
 }
 \examples{
-library(CytoDx)
 # Find the table containing fcs file names in CytoDx package
 path=system.file("extdata",package="CytoDx")
 # read the table

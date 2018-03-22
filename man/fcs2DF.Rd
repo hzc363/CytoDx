@@ -49,7 +49,6 @@ Returns a data frame containing the preprocessed cytometry data.
 A function that convert fcs files to a data frame.
 }
 \examples{
-library(CytoDx)
 # Find the table containing fcs file names in CytoDx package
 path=system.file("extdata",package="CytoDx")
 # read the table

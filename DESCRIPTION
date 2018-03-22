@@ -1,17 +1,15 @@
 Package: CytoDx
 Type: Package
 Title: Robust prediction of clinical outcomes using cytometry data without cell gating
-Version: 0.99.1
+Version: 0.99.2
 Author: Zicheng Hu
 Maintainer: Zicheng Hu <zicheng.hu@ucsf.edu>
 Description: This package provides functions that predict clinical outcomes using single cell data without gating. 
 License: GPL (>= 2)
-VignetteBuilder: utils
-Suggests: 
 Encoding: UTF-8
 LazyData: true
-Imports: doParallel, dplyr, glmnet, rpart, rpart.plot, stats, flowCore,grDevices, graphics, utils 
-Depends: R (>= 3.4)
+Imports: doParallel, dplyr, glmnet, rpart, rpart.plot, stats, flowCore,grDevices, graphics, utils, grDevices, graphics
+Depends: R (>= 3.5)
 Suggests: knitr
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1

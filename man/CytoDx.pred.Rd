@@ -23,7 +23,6 @@ Returns a list. xNew.Pred1 contains the predicted y for the new data at the cell
 A function that makes prediction using the CytoDx model.
 }
 \examples{
-library(CytoDx)
 # Find the table containing fcs file names in CytoDx package
 path=system.file("extdata",package="CytoDx")
 # read the table
