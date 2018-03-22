@@ -31,7 +31,6 @@
 #'   transform compensate arcsinhTransform colnames
 #' @importFrom utils read.csv
 #' @examples
-#' library(CytoDx)
 #' # Find the table containing fcs file names in CytoDx package
 #' path=system.file("extdata",package="CytoDx")
 #' # read the table

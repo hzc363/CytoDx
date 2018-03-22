@@ -11,7 +11,6 @@
 #' @return Returns a object created by rpart function. Also plots a graph of
 #'   decision tree.
 #' @examples
-#' library(CytoDx)
 #' # Find the table containing fcs file names in CytoDx package
 #' path=system.file("extdata",package="CytoDx")
 #' # read the table

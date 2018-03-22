@@ -40,7 +40,6 @@
 #'   method specifies the type of learning method. type.cell is the type of cell
 #'   level prediction. type.sample is the type of sample level prediction.
 #' @examples
-#' library(CytoDx)
 #' # Find the table containing fcs file names in CytoDx package
 #' path=system.file("extdata",package="CytoDx")
 #' # read the table
