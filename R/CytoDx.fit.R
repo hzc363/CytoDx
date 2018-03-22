@@ -71,6 +71,8 @@
 #' @importFrom glmnet cv.glmnet glmnet
 #' @importFrom stats predict
 #' @importFrom dplyr %>% group_by summarise_all left_join
+#' @import grDevices
+#' @import graphics
 #' @export
 
 CytoDx.fit= function(x,y,xSample,family,type1="response",type2="response",
