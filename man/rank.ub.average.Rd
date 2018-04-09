@@ -2,7 +2,7 @@
 % Please edit documentation in R/rank.ub.average.R
 \name{rank.ub.average}
 \alias{rank.ub.average}
-\title{Percentile rank transformation of a vector (ties.method = "average")}
+\title{Percentile rank transformation of a vector}
 \usage{
 rank.ub.average(x)
 }
@@ -13,7 +13,7 @@ rank.ub.average(x)
 Returns the percentile rank of each element.
 }
 \description{
-A function that performs the rank transformation of a vector (ties.method = "average").
+A function that performs the Percentile rank transformation of a vector
 }
 \examples{
 rank.ub.average(1:10)

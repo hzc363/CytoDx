@@ -32,20 +32,20 @@
 #' @importFrom utils read.csv
 #' @examples
 #' # Find the table containing fcs file names in CytoDx package
-#' path=system.file("extdata",package="CytoDx")
+#' path <- system.file("extdata",package="CytoDx")
 #' # read the table
-#' fcs_info = read.csv(file.path(path,"fcs_info.csv"))
+#' fcs_info <- read.csv(file.path(path,"fcs_info.csv"))
 #' # Specify the path to the cytometry files
-#' fn = file.path(path,fcs_info$fcsName)
+#' fn <- file.path(path,fcs_info$fcsName)
 #' # Read cytometry files using fcs2DF function
-#' train_data = fcs2DF(fcsFiles=fn,
+#' train_data <- fcs2DF(fcsFiles=fn,
 #'                     y=fcs_info$Label,
 #'                     assay="FCM",
 #'                     b=1/150,
 #'                     excludeTransformParameters=
 #'                       c("FSC-A","FSC-W","FSC-H","Time"))
 #' @export
-fcs2DF=function(fcsFiles,
+fcs2DF <- function(fcsFiles,
                 y=NULL,
                 assay=c("FCM", "CyTOF"),
                 b=1/200,
@@ -55,20 +55,20 @@ fcs2DF=function(fcsFiles,
                 excludeTransformParameters=
                   c("FSC-A","FSC-W","FSC-H","Time","Cell_length")){
 
-  fcs_param=NULL
-  fcs_names= gsub(".*/","",fcsFiles)
-  excludeTransformParameters=paste(excludeTransformParameters,collapse="|")
+  fcs_param <- NULL
+  fcs_names <- gsub(".*/","",fcsFiles)
+  excludeTransformParameters <- paste(excludeTransformParameters,collapse="|")
 
   # 1) identify sample :
-  fcsFiles=as.character(fcsFiles)
+  fcsFiles <- as.character(fcsFiles)
 
   # 2) read the fcs files
-  fcs = flowCore::read.flowSet(fcsFiles,transformation="linearize",alter.names=FALSE,truncate_max_range=FALSE)
+  fcs <- flowCore::read.flowSet(fcsFiles,transformation="linearize",alter.names=FALSE,truncate_max_range=FALSE)
   if(!is.null(fileSampleSize)){
-    fcs = flowCore::fsApply(fcs, function(f){
-      L=nrow(f@exprs)
+    fcs <- flowCore::fsApply(fcs, function(f){
+      L <- nrow(f@exprs)
       if(L>fileSampleSize){
-        f@exprs=f@exprs[sample(1:L,fileSampleSize),]
+        f@exprs <- f@exprs[sample(seq_len(L),fileSampleSize),]
       }
       return(f)
     })
@@ -77,27 +77,27 @@ fcs2DF=function(fcsFiles,
   # 3) compensation and transformation
   if (assay == "FCM") {
     # retreiving fluorescent biomarkers
-    w=which(!grepl(excludeTransformParameters,flowCore::colnames(fcs),ignore.case = TRUE))
-    biomarker_vector = flowCore::colnames(fcs)[w]
+    w <- which(!grepl(excludeTransformParameters,flowCore::colnames(fcs),ignore.case = TRUE))
+    biomarker_vector <- flowCore::colnames(fcs)[w]
     # identify the fcs file format
-    version = flowCore::fsApply(fcs, function(frame) {
+    version <- flowCore::fsApply(fcs, function(frame) {
       return(flowCore::keyword(frame, "FCSversion")[[1]])
     })
-    unique_version = as.numeric(unique(as.vector(version)))
+    unique_version <- as.numeric(unique(as.vector(version)))
 
     # compensation, transformation
     ## if the file version is 2.0, then code will log transform the data
     if (unique_version == 2) {
-      trans = flowCore::logTransform()
-      translist = flowCore::transformList(biomarker_vector,trans)
-      fcs = flowCore::transform(fcs, translist)
+      trans <- flowCore::logTransform()
+      translist <- flowCore::transformList(biomarker_vector,trans)
+      fcs <- flowCore::transform(fcs, translist)
     } else if (unique_version == 3) {
       # check if user have provided the compmatrix
       if(!is.null(compFiles)){
         compList=lapply(compFiles,function(x){
           if(is.na(x)){return(as.matrix(NA))}else{return(as.matrix(read.csv(x,row.names = 1,check.names = FALSE)))}
         })
-        for(id in 1:length(fcs)){
+        for(id in seq_along(fcs)){
           if(!is.na(compList[[id]][1,1])){
             fcs[[id]]@description$SPILL <- compList[[id]]
           }
@@ -106,37 +106,37 @@ fcs2DF=function(fcsFiles,
 
       ### function first checks if the spill matrix in the flowframe is an actual spill matrix or an identity matrix
       if (is.null(flowCore::keyword(fcs[[1]], "SPILL")[[1]]) == FALSE) {
-        check = flowCore::fsApply(fcs, function(x) {
-          result = isSymmetric(flowCore::keyword(x, "SPILL")[[1]])
+        check <- flowCore::fsApply(fcs, function(x) {
+          result <- isSymmetric(flowCore::keyword(x, "SPILL")[[1]])
         })
         ### if all flowframes have spill matrices then my function
         ### will apply them to each flowframe in the flowset for compensation
         if (unique(check)[[1]] == FALSE) {
-          fcs = flowCore::fsApply(fcs, function(x) {
-            new_frame = flowCore::compensate(x, flowCore::keyword(x, "SPILL")[[1]])
+          fcs <- flowCore::fsApply(fcs, function(x) {
+            new_frame <- flowCore::compensate(x, flowCore::keyword(x, "SPILL")[[1]])
             return(new_frame)
           })
         }
       }
 
-      trans = flowCore::arcsinhTransform(transformationId="defaultArcsinhTransform",a=0,b=b,c=0)
-      translist = flowCore::transformList(biomarker_vector, trans)
-      fcs = flowCore::transform(fcs, translist)
+      trans <- flowCore::arcsinhTransform(transformationId="defaultArcsinhTransform",a=0,b=b,c=0)
+      translist <- flowCore::transformList(biomarker_vector, trans)
+      fcs <- flowCore::transform(fcs, translist)
     }
   } else if (assay == "CyTOF") {
-    w=which(!grepl(excludeTransformParameters,flowCore::colnames(fcs),ignore.case = TRUE))
-    biomarker_vector = flowCore::colnames(fcs)[w]
+    w <- which(!grepl(excludeTransformParameters,flowCore::colnames(fcs),ignore.case = TRUE))
+    biomarker_vector  <-  flowCore::colnames(fcs)[w]
 
-    trans = flowCore::arcsinhTransform(transformationId = "defaultArcsinhTransform", a = 0, b = b, c = 0)
-    translist = flowCore::transformList(biomarker_vector, trans)
-    fcs = flowCore::transform(fcs, translist)
+    trans <- flowCore::arcsinhTransform(transformationId = "defaultArcsinhTransform", a = 0, b = b, c = 0)
+    translist <- flowCore::transformList(biomarker_vector, trans)
+    fcs <- flowCore::transform(fcs, translist)
   }
-  fcs=set2DF(fcs,fcsFiles,y)
+  fcs <- set2DF(fcs,fcsFiles,y)
   if(!is.null(nameDict)){
-    t1 = colnames(fcs)
-    w = which(t1%in%names(nameDict))
-    t1[w] = nameDict[t1[w]]
-    colnames(fcs)=t1
+    t1 <- colnames(fcs)
+    w <- which(t1%in%names(nameDict))
+    t1[w] <- nameDict[t1[w]]
+    colnames(fcs) <- t1
   }
   return(fcs)
 }

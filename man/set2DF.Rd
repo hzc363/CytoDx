@@ -27,11 +27,11 @@ A function that convert a flowSet to a data frame.
 \examples{
 library(flowCore)
 # Find the table containing fcs file names in CytoDx package
-path=system.file("extdata",package="CytoDx")
+path <- system.file("extdata",package="CytoDx")
 # read the table
-fcs_info = read.csv(file.path(path,"fcs_info.csv"))
+fcs_info <- read.csv(file.path(path,"fcs_info.csv"))
 # Specify the path to the cytometry files
-fn = file.path(path,fcs_info$fcsName)
-fSet = read.flowSet(fn)
-df = set2DF(flowSet=fSet,fcsFiles=fn,y = fcs_info$Label)
+fn <- file.path(path,fcs_info$fcsName)
+fSet <- read.flowSet(fn)
+df <- set2DF(flowSet=fSet,fcsFiles=fn,y = fcs_info$Label)
 }

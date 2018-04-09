@@ -20,5 +20,5 @@ Returns data frame containing rank transformed data.
 A function that performs the rank transformation of the data.
 }
 \examples{
-x = pRank(x=iris[,1:4],xSample=iris$Species)
+x <- pRank(x=iris[,1:4],xSample=iris$Species)
 }

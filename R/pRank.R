@@ -9,25 +9,18 @@
 #' @return Returns data frame containing rank transformed data.
 #' @importFrom dplyr mutate_all
 #' @examples
-#' x = pRank(x=iris[,1:4],xSample=iris$Species)
+#' x <- pRank(x=iris[,1:4],xSample=iris$Species)
 #' @export
 
 
-pRank = function(x,xSample){
-  x = cbind.data.frame(x,"xSample"=xSample)%>%
+pRank <- function(x,xSample){
+
+  stopifnot(length(xSample) == nrow(x))
+
+  x <- cbind.data.frame(x,"xSample"=xSample)%>%
     dplyr::group_by(xSample)%>%
     dplyr::mutate_all(.funs=rank.ub.average)%>%
     as.data.frame()%>%
     dplyr::select(-xSample)
   return(x)
 }
-
-
-# pRank = function(x){
-#   x = lapply(x,function(M){
-#     id = sapply(M,is.numeric)
-#     M[,id]=apply(M[,id],2,function(m){rank(m)/length(m)*100})
-#     return(M)
-#   })
-#   return(x)
-# }

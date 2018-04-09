@@ -4,8 +4,9 @@
 \alias{CytoDx.fit}
 \title{Build the CytoDx model}
 \usage{
-CytoDx.fit(x, y, xSample, family, type1 = "response", type2 = "response",
-  parallelCore = 1, reg = FALSE, ...)
+CytoDx.fit(x, y, xSample, family = c("gaussian", "binomial", "poisson",
+  "multinomial", "cox", "mgaussian"), type1 = "response",
+  type2 = "response", parallelCore = 1, reg = FALSE, ...)
 }
 \arguments{
 \item{x}{The marker profile of cells pooled from all samples. Each row is a cell, each column is
@@ -61,26 +62,26 @@ A function that builds the CytoDx model.
 }
 \examples{
 # Find the table containing fcs file names in CytoDx package
-path=system.file("extdata",package="CytoDx")
+path <- system.file("extdata",package="CytoDx")
 # read the table
-fcs_info = read.csv(file.path(path,"fcs_info.csv"))
+fcs_info <- read.csv(file.path(path,"fcs_info.csv"))
 # Specify the path to the cytometry files
-fn = file.path(path,fcs_info$fcsName)
+fn <- file.path(path,fcs_info$fcsName)
 # Read cytometry files using fcs2DF function
-train_data = fcs2DF(fcsFiles=fn,
+train_data <- fcs2DF(fcsFiles=fn,
                     y=fcs_info$Label,
                     assay="FCM",
                     b=1/150,
                     excludeTransformParameters=
                       c("FSC-A","FSC-W","FSC-H","Time"))
 # build the model
-fit =CytoDx.fit(x=as.matrix(train_data[,1:7]),
+fit <- CytoDx.fit(x=as.matrix(train_data[,1:7]),
                 y=train_data$y,
                 xSample = train_data$xSample,
                 reg=FALSE,
                 family="binomial")
 # check accuracy for training data
-pred = CytoDx.pred(fit,
+pred <- CytoDx.pred(fit,
                    xNew=as.matrix(train_data[,1:7]),
                    xSampleNew=train_data$xSample)
 

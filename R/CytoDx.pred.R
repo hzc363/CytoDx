@@ -11,26 +11,26 @@
 #'   xNew.Pred2 contains the predicted y for the new data at the sample level.
 #' @examples
 #' # Find the table containing fcs file names in CytoDx package
-#' path=system.file("extdata",package="CytoDx")
+#' path <- system.file("extdata",package="CytoDx")
 #' # read the table
-#' fcs_info = read.csv(file.path(path,"fcs_info.csv"))
+#' fcs_info <- read.csv(file.path(path,"fcs_info.csv"))
 #' # Specify the path to the cytometry files
-#' fn = file.path(path,fcs_info$fcsName)
+#' fn <- file.path(path,fcs_info$fcsName)
 # Read cytometry files using fcs2DF function
-#' train_data = fcs2DF(fcsFiles=fn,
+#' train_data <- fcs2DF(fcsFiles=fn,
 #'                     y=fcs_info$Label,
 #'                     assay="FCM",
 #'                     b=1/150,
 #'                     excludeTransformParameters=
 #'                       c("FSC-A","FSC-W","FSC-H","Time"))
 #' # build the model
-#' fit =CytoDx.fit(x=as.matrix(train_data[,1:7]),
+#' fit <- CytoDx.fit(x=as.matrix(train_data[,1:7]),
 #'                 y=train_data$y,
 #'                 xSample = train_data$xSample,
 #'                 reg=FALSE,
 #'                 family="binomial")
 #' # check accuracy for training data
-#' pred = CytoDx.pred(fit,
+#' pred <- CytoDx.pred(fit,
 #'                    xNew=as.matrix(train_data[,1:7]),
 #'                    xSampleNew=train_data$xSample)
 #'
@@ -42,28 +42,30 @@
 #' @importFrom stats predict
 #' @export
 
-CytoDx.pred = function(fit,xNew,xSampleNew){
+CytoDx.pred <- function(fit,xNew,xSampleNew){
 
-  xSampleNew=as.character(xSampleNew)
+  stopifnot(length(xSampleNew) == nrow(xNew))
 
-  preds = predict(fit$model.cell,xNew,type=fit$type.cell)
+  xSampleNew <- as.character(xSampleNew)
+
+  preds <- predict(fit$model.cell,xNew,type=fit$type.cell)
 
 
-  xNew.Pred = cbind.data.frame("sample"=xSampleNew,preds)
-  colnames(xNew.Pred)=c("sample",paste0("y",".Pred.",colnames(preds)))
-  SP.new=xNew.Pred%>%group_by(sample)%>%summarise_all(mean)
+  xNew.Pred <- cbind.data.frame("sample"=xSampleNew,preds)
+  colnames(xNew.Pred) <- c("sample",paste0("y",".Pred.",colnames(preds)))
+  SP.new <- xNew.Pred%>%group_by(sample)%>%summarise_all(mean)
 
-  xNew = SP.new[,grep(".Pred",colnames(SP.new))]%>%as.matrix()
-  xNew = cbind("constant"=1,xNew)
-  xNew.Pred2 = predict(fit$model.sample,xNew,type=fit$type.sample)
-  SP.new[,grep(".Pred",colnames(SP.new))] = as.data.frame(xNew.Pred2)
+  xNew <- SP.new[,grep(".Pred",colnames(SP.new))]%>%as.matrix()
+  xNew <- cbind("constant"=1,xNew)
+  xNew.Pred2 <- predict(fit$model.sample,xNew,type=fit$type.sample)
+  SP.new[,grep(".Pred",colnames(SP.new))] <- as.data.frame(xNew.Pred2)
   #SP.new=as.data.frame(SP.new)
 
-  SP.new=as.data.frame(SP.new)
-  colnames(SP.new)=colnames(xNew.Pred)
-  row.names(SP.new)=SP.new$sample
+  SP.new <- as.data.frame(SP.new)
+  colnames(SP.new) <- colnames(xNew.Pred)
+  row.names(SP.new) <- SP.new$sample
 
-  SP.new = SP.new[unique(xSampleNew),]
+  SP.new  <-  SP.new[unique(xSampleNew),]
   return(list("xNew.Pred.cell"=xNew.Pred,
               "xNew.Pred.sample"=SP.new))
 

@@ -27,24 +27,24 @@ associated with clinical outcome.
 # Find the table containing fcs file names in CytoDx package
 path=system.file("extdata",package="CytoDx")
 # read the table
-fcs_info = read.csv(file.path(path,"fcs_info.csv"))
+fcs_info <- read.csv(file.path(path,"fcs_info.csv"))
 # Specify the path to the cytometry files
-fn = file.path(path,fcs_info$fcsName)
+fn <- file.path(path,fcs_info$fcsName)
 # Read cytometry files using fcs2DF function
-train_data = fcs2DF(fcsFiles=fn,
+train_data <- fcs2DF(fcsFiles=fn,
                     y=fcs_info$Label,
                     assay="FCM",
                     b=1/150,
                     excludeTransformParameters=
                       c("FSC-A","FSC-W","FSC-H","Time"))
 # build the model
-fit =CytoDx.fit(x=as.matrix(train_data[,1:7]),
+fit <- CytoDx.fit(x=as.matrix(train_data[,1:7]),
                 y=train_data$y,
                 xSample = train_data$xSample,
                 reg=FALSE,
                 family="binomial")
 # check accuracy for training data
-pred = CytoDx.pred(fit,
+pred <- CytoDx.pred(fit,
                    xNew=as.matrix(train_data[,1:7]),
                    xSampleNew=train_data$xSample)
 
@@ -52,6 +52,6 @@ boxplot(pred$xNew.Pred.sample$y.Pred.s0~
           fcs_info$Label)
 
 # Find the associated population using treeGate
-TG = treeGate(P = fit$train.Data.cell$y.Pred.s0,
+TG <- treeGate(P = fit$train.Data.cell$y.Pred.s0,
               x= train_data[,1:7])
 }

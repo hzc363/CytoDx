@@ -50,13 +50,13 @@ A function that convert fcs files to a data frame.
 }
 \examples{
 # Find the table containing fcs file names in CytoDx package
-path=system.file("extdata",package="CytoDx")
+path <- system.file("extdata",package="CytoDx")
 # read the table
-fcs_info = read.csv(file.path(path,"fcs_info.csv"))
+fcs_info <- read.csv(file.path(path,"fcs_info.csv"))
 # Specify the path to the cytometry files
-fn = file.path(path,fcs_info$fcsName)
+fn <- file.path(path,fcs_info$fcsName)
 # Read cytometry files using fcs2DF function
-train_data = fcs2DF(fcsFiles=fn,
+train_data <- fcs2DF(fcsFiles=fn,
                     y=fcs_info$Label,
                     assay="FCM",
                     b=1/150,

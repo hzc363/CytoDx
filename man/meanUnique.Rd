@@ -16,7 +16,7 @@ If x is numeric, returns the mean. Otherwise, returns the unique elements of x.
 A function that calulate mean or take unique elements of a vector.
 }
 \examples{
-x = 1:5
+x <- 1:5
 meanUnique(x)
 x=c("a","a","b")
 meanUnique(x)
