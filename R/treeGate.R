@@ -45,12 +45,7 @@
 #' @importFrom rpart.plot rpart.plot
 #' @export
 treeGate <- function(P,x,...){
-  #if(is.null(names(x))){names(x)=paste0("sample",1:length(x))}
-  #xN = sapply(x,nrow)
-  #x = Reduce(rbind,x)
-
   colnames(x) <- gsub("[^[:alnum:]]", "_",colnames(x))
-  #P = fit$train.Data1$y.Pred.s0
   x <- cbind.data.frame("P"=P,x)
   fit <- rpart(P~.,method="anova", data=x,...)
   rpart.plot(fit)

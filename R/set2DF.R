@@ -41,8 +41,7 @@ set2DF <- function(flowSet,fcsFiles,y = NULL){
   #annotate expr colnames
   channels <- Label[[1]]$name
   antibodies <- Label[[1]]$desc
-  #antibodies=toupper(antibodies)
-  #channels=toupper(channels)
+
   antibodies <- vapply(seq_along(antibodies), function(i){
     if(is.na(antibodies[i])|antibodies[i]=="NA"){return(channels[i])}else{antibodies[i]}
   }, character(1))

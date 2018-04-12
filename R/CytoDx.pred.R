@@ -59,7 +59,6 @@ CytoDx.pred <- function(fit,xNew,xSampleNew){
   xNew <- cbind("constant"=1,xNew)
   xNew.Pred2 <- predict(fit$model.sample,xNew,type=fit$type.sample)
   SP.new[,grep(".Pred",colnames(SP.new))] <- as.data.frame(xNew.Pred2)
-  #SP.new=as.data.frame(SP.new)
 
   SP.new <- as.data.frame(SP.new)
   colnames(SP.new) <- colnames(xNew.Pred)
