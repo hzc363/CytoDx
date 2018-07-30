@@ -81,7 +81,7 @@ CytoDx.fit <-  function(x,y,xSample,
                           parallelCore=1,reg=FALSE,...){
   stopifnot(length(xSample) == nrow(x))
 
-  stopifnot(length(y) == nrow(x))
+  stopifnot(nrow(as.matrix(y)) == nrow(x))
 
 
   family <- match.arg(family)
