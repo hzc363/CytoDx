@@ -1,7 +1,7 @@
 Package: CytoDx
 Type: Package
 Title: Robust prediction of clinical outcomes using cytometry data without cell gating
-Version: 1.0.0
+Version: 1.0.1
 Author: Zicheng Hu
 Maintainer: Zicheng Hu <zicheng.hu@ucsf.edu>
 Description: This package provides functions that predict clinical outcomes using single cell data (such as flow cytometry data, RNA single cell sequencing data) without the requirement of cell gating or clustering. 
@@ -12,6 +12,5 @@ Imports: doParallel, dplyr, glmnet, rpart, rpart.plot, stats, flowCore,grDevices
 Depends: R (>= 3.5)
 Suggests: knitr
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 biocViews: CellBiology, FlowCytometry, StatisticalMethod, Software, CellBasedAssays, Regression, Classification, Survival
-
